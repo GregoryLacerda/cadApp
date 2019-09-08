@@ -8,12 +8,15 @@
     $dpagamento = $_POST['diaPag'];
     $valor = $_POST['valor'];
     $vencimento = $_POST['venci'];
+    $atraso = $_POST['atrasado'];
+    $parcelas = $_POST['parcelas'];
 
         $con = new Conectar;
         $conect = $con->connection();
         
-        $sql = "INSERT INTO contas.tb_dividas (nome, tipo, descricao, dpagamento, valor, vencimento) VALUES(
-            :nome, :tipo, :descricao, :dpagamento, :valor, :vencimento);";
+        $sql = "INSERT INTO contas.tb_dividas (nome, tipo, descricao, dpagamento, valor, vencimento,
+        atraso, parcelas) VALUES(
+        :nome, :tipo, :descricao, :dpagamento, :valor, :vencimento, :atraso, :parcelas);";
         
         $stmt = $conect->prepare($sql);
 
@@ -23,6 +26,8 @@
         $stmt->bindValue(':dpagamento', $dpagamento);
         $stmt->bindValue(':valor', $valor);
         $stmt->bindValue(':vencimento', $vencimento);
+        $stmt->bindValue(':atraso', $atraso);
+        $stmt->bindValue(':parcelas', $parcelas);
     
         $stmt->execute();
             

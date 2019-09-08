@@ -5,13 +5,14 @@
         <div class="list-group list-group-horizontal-sm">
             <table class="table table-hover">
                 <thead class="thead-dark">
-                    <tr data-toggle="modal" data-target="#editModal">
+                    <tr>
                         <th scope="col">Nome</th>
                         <th scope="col">Descrição</th>
                         <th scope="col">Tipo</th>
                         <th scope="col">Dia do Pagamento</th>
                         <th scope="col">Valor</th>
                         <th scope="col">Vencimento</th>
+                        <th scope="col">Parcelas</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,7 +27,7 @@
         <div class="list-group list-group-horizontal-sm">
             <table class="table table-hover">
                 <thead class="thead-dark">
-                    <tr data-toggle="modal" data-target="#editModal">
+                    <tr>
                         <th scope="col">Nome</th>
                         <th scope="col">Descrição</th>
                         <th scope="col">Tipo</th>
@@ -57,7 +58,7 @@
                     </tr>
                 </thead>
                 <tbody class="text-danger">
-                    <?php $consult->atrasos(); ?>
+                    <?php $consult->atrasos(); ?>                    
                 </tbody>
             </table>
         </div>
@@ -129,11 +130,16 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="parc">Parcelas</label>
-                            <input type="number" class="form-control" id="parc" placeholder="Parcelas" name="parc" required>
-                        </div><br>
-                        <div class="form-group custom-control custom-checkbox my-5 mr-sm-2">
-                            <input type="checkbox" class="custom-control-input" id="atras">
-                            <label class="custom-control-label" for="atras">Atrasado</label>
+                            <input type="number" class="form-control" id="parcelas" placeholder="Parcelas" name="parcelas" required>
+                        </div>
+                        
+                        <div class="form-group btn-group btn-group-toggle col-md-6 row-md-1" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                <input type="radio" name="atrasado" id="option1" autocomplete="off" value="não atrasado" checked> Não atrasado
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="radio" name="atrasado" id="option2" autocomplete="off" value="atrasado"> Atrasado
+                            </label>
                         </div>
                     </div>
 
