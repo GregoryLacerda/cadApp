@@ -10,19 +10,25 @@ class Consultar {
     {   
         $con = new Conectar;
         $conect = $con->connection();    
-        $sql = "SELECT * FROM contas.tb_dividas WHERE dpagamento = :dpag LIMIT 10;";
+        $sql = "SELECT * FROM contas.tb_dividas WHERE dpagamento = :dpag and atraso = :atraso;";
         $stmt = $conect->prepare($sql); 
         $stmt->bindValue(':dpag', "Adiantamento");
+        $stmt->bindValue(':atraso', "não atrasado");
         $stmt->execute();
 
         $valorTotal = 0;
-
+        $idLine = 0;
         
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($dados as $row) {
+
+            # Formatação da data   
             $myDateTime = DateTime::createFromFormat('Y-m-d', $row['vencimento']);
             $newDateString = $myDateTime->format('d/m/Y');
-            echo "<tr data-toggle='modal' data-target='#editModal'>
+
+            $idLine = $row['id'];
+
+            echo "<tr>
                     <th>" . $row['nome'] . " </th>
                     <th>" . $row['descricao'] . " </th>
                     <th>" . $row['tipo'] . " </th>
@@ -30,16 +36,27 @@ class Consultar {
                     <th>R$ " . $row['valor'] . " </th>
                     <th>" . $newDateString . " </th>
                     <th>" . $row['parcelas'] . " </th>
+                    <th>R$ " . $row['valor'] * $row['parcelas'] . " </th>
+
+
+                    <th> <button class='btn btn-primary' data-toggle='modal' data-target='#editModal' 
+                    data-id='". $row['id'] ."' data-name='". $row['nome'] ."' data-descricao='". $row['descricao'] ."' 
+                    data-tipo='". $row['tipo'] ."' data-dpag='". $row['dpagamento'] ."' 
+                    data-valor='". $row['valor'] ."' data-date='". $row['vencimento'] ."' 
+                    data-parcelas='". $row['parcelas'] ."' data-atraso='". $row['atraso'] ."' >Alterar</button> </th>
+                    
                  </tr>";
             $valorTotal += $row['valor'];
         }
             echo "<tr>
-                <th>Valor Total de Pagamento: </th>
-                <th>R$ " . $valorTotal . " </th>
+                <th class='text-primary'>Valor Total de Pagamento: </th>
+                <th class='text-success'>R$ " . $valorTotal . " </th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
+                <th></th>            
                 <th></th>            
             </tr>";
 
@@ -51,33 +68,47 @@ class Consultar {
     {   
         $con = new Conectar;
         $conect = $con->connection();    
-        $sql = "SELECT * FROM contas.tb_dividas WHERE dpagamento = :dpag;";
+        $sql = "SELECT * FROM contas.tb_dividas WHERE dpagamento = :dpag and atraso = :atraso;";
         $stmt = $conect->prepare($sql);
         $stmt->bindValue(':dpag', "Final do Mês");
+        $stmt->bindValue(':atraso', "não atrasado");
         $stmt->execute();
 
         $valorTotal = 0;
 
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($dados as $row) {
-            echo "<tr data-toggle='modal' data-target='#editModal'> 
+
+            # Formatação da data
+            $myDateTime = DateTime::createFromFormat('Y-m-d', $row['vencimento']);
+            $newDateString = $myDateTime->format('d/m/Y');
+
+            echo "<tr> 
                         <th>" . $row['nome'] . " </th>
                         <th>" . $row['descricao'] . " </th>
                         <th>" . $row['tipo'] . " </th>
                         <th>" . $row['dpagamento'] . " </th>
-                        <th>R$" . $row['valor'] . "</th>
-                        <th>" . $row['vencimento'] . " </th>
+                        <th>R$ " . $row['valor'] . "</th>
+                        <th>" . $newDateString . " </th>
                         <th>" . $row['parcelas'] . " </th>
+                        <th>R$ " . $row['valor'] * $row['parcelas'] . " </th>
+                        <th> <button class='btn btn-primary' data-toggle='modal' data-target='#editModal' 
+                        data-id='". $row['id'] ."' data-name='". $row['nome'] ."' data-descricao='". $row['descricao'] ."' 
+                        data-tipo='". $row['tipo'] ."' data-dpag='". $row['dpagamento'] ."' 
+                        data-valor='". $row['valor'] ."' data-date='". $row['vencimento'] ."' 
+                        data-parcelas='". $row['parcelas'] ."' data-atraso='". $row['atraso'] ."' >Alterar</button> </th>
                         </tr>";
             $valorTotal += $row['valor'];
         }
             echo "<tr>
-                <th>Valor Total de Pagamento: </th>
-                <th>R$ " . $valorTotal . " </th>
+                <th class='text-primary'>Valor Total de Pagamento: </th>
+                <th class='text-success'>R$ " . $valorTotal . " </th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
+                <th></th>            
                 <th></th>            
             </tr>";
         $con->disconect();
@@ -98,28 +129,45 @@ class Consultar {
 
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($dados as $row) {
-            echo "<tr data-toggle='modal' data-target='#editModal'> 
+
+            # Formatação da data
+            $myDateTime = DateTime::createFromFormat('Y-m-d', $row['vencimento']);
+            $newDateString = $myDateTime->format('d/m/Y');
+            
+            echo "<tr> 
                         <th>" . $row['nome'] . " </th>
                         <th>" . $row['descricao'] . " </th>
                         <th>" . $row['tipo'] . " </th>
                         <th>" . $row['dpagamento'] . " </th>
                         <th>R$" . $row['valor'] . " </th>
-                        <th>" . $row['vencimento'] . " </th>
+                        <th>" . $newDateString . " </th>
                         <th>" . $row['parcelas'] . " </th>  
+                        <th>R$ " . $row['valor'] * $row['parcelas'] . " </th>
+                        <th> <button class='btn btn-primary' data-toggle='modal' data-target='#editModal' 
+                        data-id='". $row['id'] ."' data-name='". $row['nome'] ."' data-descricao='". $row['descricao'] ."' 
+                        data-tipo='". $row['tipo'] ."' data-dpag='". $row['dpagamento'] ."' 
+                        data-valor='". $row['valor'] ."' data-date='". $row['vencimento'] ."' 
+                        data-parcelas='". $row['parcelas'] ."' data-atraso='". $row['atraso'] ."' >Alterar</button> </th>
                         </tr>";
             $valorTotal += $row['valor'];
         }
         echo "<tr>
-            <th>Valor Total de Pagamento: </th>
-            <th>R$ " . $valorTotal . " </th>
+            <th class='text-primary'>Valor Total de Pagamento: </th>
+            <th class='text-success'>R$ " . $valorTotal . " </th>
             <th></th>
             <th></th>
             <th></th>
             <th></th>
             <th></th>            
+            <th></th>            
+            <th></th>            
         </tr>";
 
         $con->disconect();
+    }
+
+    public function delete($id){
+        echo $id;
     }
 
     
